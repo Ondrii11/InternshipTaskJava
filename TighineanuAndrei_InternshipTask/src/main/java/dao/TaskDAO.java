@@ -47,6 +47,9 @@ public class TaskDAO {
     }
 
     public void addTask(Task task) throws SQLException {
+        if(task.getTaskTitle().length() > 20 || task.getTaskDescription().length() > 30){
+            System.out.println("Task Title Must be < 20 chars & Task Description must be < 30 chars.");
+        }
         UserDAO userDAO = new UserDAO();
         if(!userDAO.checkUserName(task.getUserName())){
             System.out.println("Username not found");
@@ -85,15 +88,12 @@ public class TaskDAO {
                     userName);
 
             getResultSet(queryString);
-            if (!resultSet.next()) {
-                System.out.println("UserName not found");
-                return ;
-            }
-            System.out.println("User Name" + "\t" + "Task Title" + "\t" + "Task Description");
+
+            System.out.println("Task Title" + "\t" + "Task Description");
             while (resultSet.next()){
-                System.out.println(resultSet.getString("userName") + "\t" +
-                        resultSet.getString("taskTitle") + "\t" +
-                        resultSet.getString("taskDescription") + "\n" ) ;
+                System.out.println(
+                        resultSet.getString("taskTitle").replace("_", " ") + "\t" +
+                        resultSet.getString("taskDescription").replace("_", " ")) ;
             }
 
         } catch (SQLException e){

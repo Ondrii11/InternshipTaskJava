@@ -1,0 +1,6 @@
+model\Task.class
+Main.class
+dao\TaskDAO.class
+dao\UserDAO.class
+connection\ConnectionManager.class
+model\User.class

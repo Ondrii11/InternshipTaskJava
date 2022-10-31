@@ -27,6 +27,11 @@ public class UserDAO {
         resultSet = preparedStatement.executeQuery();
     }
     public void createUser(User user) {
+        if(user.getFirstName().length() > 12 || user.getLastName().length() > 12 || user.getUserName().length() > 20 ||
+           user.getTasksNumber() > 0) {
+            System.out.println("FN < 12 chars, LN < 12 chars, UN < 20chars, tasksNR must be init with 0.");
+            return;
+        }
         try {
             String queryString = "INSERT INTO users(firstName, lastName, userName, tasksNumber) VALUES(?, ?, ?, ?)";
             connection = getConnection();

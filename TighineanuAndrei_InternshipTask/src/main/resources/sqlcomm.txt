@@ -1,0 +1,2 @@
+create table users(firstName varchar(12), lastName varchar(12), userName varchar(20) PRIMARY KEY, tasksNumber int);
+create table tasks(userName varchar(12), taskTitle varchar(20), taskDescription varchar(30));

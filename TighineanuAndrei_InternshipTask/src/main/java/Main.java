@@ -42,24 +42,43 @@ public class Main {
                         break;
 
                     case "-addTask":
-                        String userNameTask, taskTitle, taskDescription;
+                        String userNameTask = null, taskTitle = null, taskDescription = null;
                         if(args.length < 4){
                             System.out.println("bad input");
                         }
-
                         if(args[1].startsWith("-un=") && args[2].startsWith("-tt=") &&
                                 args[3].startsWith("-td=")){
-
                             userNameTask = args[1].substring(4).replace("'", "");
                             taskTitle = args[2].substring(4).replace("'","");
                             taskDescription = args[3].substring(4).replace("'","");
                         } else {
                             System.out.println("bad input, retry.");
-                            break;
                         }
 
                         Task taskToAdd = new Task(userNameTask, taskTitle, taskDescription);
                         taskDAO.addTask(taskToAdd);
+
+                        break;
+
+                    case "-addTaskGroup":
+                        String userNames = null, tasksTitle = null, tasksDescription = null;
+                        String[] separatedNames;
+                        if(args.length < 4){
+                            System.out.println("bad input");
+                        }
+                        if(args[1].startsWith("-un=") && args[2].startsWith("-tt=") &&
+                                args[3].startsWith("-td=")){
+                            userNames = args[1].substring(4).replace("'", "");
+                            tasksTitle = args[2].substring(4).replace("'","");
+                            tasksDescription = args[3].substring(4).replace("'","");
+                        } else {
+                            System.out.println("bad input, retry.");
+                        }
+                        separatedNames = userNames.split(",");
+                        for(int i = 0; i < separatedNames.length; i++){
+                            Task taskToAddGroup = new Task(separatedNames[i], tasksTitle, tasksDescription);
+                            taskDAO.addTask(taskToAddGroup);
+                        }
 
                         break;
 
@@ -71,6 +90,10 @@ public class Main {
 
                         if(args[1].startsWith("-un=")){
                             userTaskFind = args[1].substring(4).replace("'","");
+                            if(!userDAO.checkUserName(userTaskFind)){
+                                System.out.println("User not found or not assigned tasks.");
+                                break;
+                            }
                         } else {
                             System.out.println("bad input, retry.");
                             break;
