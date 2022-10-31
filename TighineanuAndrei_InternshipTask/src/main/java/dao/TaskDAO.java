@@ -27,7 +27,6 @@ public class TaskDAO {
         resultSet = preparedStatement.executeQuery();
     }
 
-
     public void updateUserTasksNumber(String userName){
         int nrOfTasks;
         try{
@@ -48,7 +47,11 @@ public class TaskDAO {
     }
 
     public void addTask(Task task) throws SQLException {
-
+        UserDAO userDAO = new UserDAO();
+        if(!userDAO.checkUserName(task.getUserName())){
+            System.out.println("Username not found");
+            return;
+        }
         try{
             String queryString = "INSERT INTO tasks(userName, taskTitle, taskDescription) VALUES(?, ?, ?)";
             connection = getConnection();
@@ -82,6 +85,10 @@ public class TaskDAO {
                     userName);
 
             getResultSet(queryString);
+            if (!resultSet.next()) {
+                System.out.println("UserName not found");
+                return ;
+            }
             System.out.println("User Name" + "\t" + "Task Title" + "\t" + "Task Description");
             while (resultSet.next()){
                 System.out.println(resultSet.getString("userName") + "\t" +

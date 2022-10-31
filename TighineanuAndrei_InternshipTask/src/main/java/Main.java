@@ -13,23 +13,26 @@ public class Main {
 
                 switch(args[0]) {
                     case "-createUser":
-                        String firstName = "", lastName = "", userName = "";
+                        String firstName , lastName , userName;
                         if(args.length < 4){
                             System.out.println("bad input");
                         }
-                        if (args[1].substring(0, 4).equals("-fn=")) {
+                        if (args[1].startsWith("-fn=") && args[2].startsWith("-ln=") &&
+                                args[3].startsWith("-un=")) {
                             firstName = args[1].substring(4).replace("'", "");
-                        }
-
-                        if (args[2].substring(0, 4).equals("-ln=")) {
                             lastName = args[2].substring(4).replace("'", "");
+                            userName = args[3].substring(4).replace("'", "");
+                        } else {
+                            System.out.println("bad input, retry.");
+                            break;
                         }
 
-                        if (args[3].substring(0, 4).equals("-un=")) {
-                            userName = args[3].substring(4).replace("'", "");
+                        if(!userDAO.checkUserName(userName)) {
+                            User userToAdd = new User(firstName, lastName, userName, 0);
+                            userDAO.createUser(userToAdd);
+                        } else {
+                            System.out.println("Username already taken.");
                         }
-                        User userToAdd = new User(firstName, lastName, userName, 0);
-                        userDAO.createUser(userToAdd);
 
                         break;
 
@@ -39,21 +42,20 @@ public class Main {
                         break;
 
                     case "-addTask":
-                        String userNameTask = "", taskTitle = "", taskDescription = "";
+                        String userNameTask, taskTitle, taskDescription;
                         if(args.length < 4){
                             System.out.println("bad input");
                         }
 
-                        if(args[1].substring(0, 4).equals("-un=")){
+                        if(args[1].startsWith("-un=") && args[2].startsWith("-tt=") &&
+                                args[3].startsWith("-td=")){
+
                             userNameTask = args[1].substring(4).replace("'", "");
-                        }
-
-                        if(args[2].substring(0,4).equals("-tt=")){
                             taskTitle = args[2].substring(4).replace("'","");
-                        }
-
-                        if(args[3].substring(0,4).equals("-td=")){
                             taskDescription = args[3].substring(4).replace("'","");
+                        } else {
+                            System.out.println("bad input, retry.");
+                            break;
                         }
 
                         Task taskToAdd = new Task(userNameTask, taskTitle, taskDescription);
@@ -62,13 +64,16 @@ public class Main {
                         break;
 
                     case "-showTasks":
-                        String userTaskFind = "";
+                        String userTaskFind;
                         if(args.length < 2){
                             System.out.println("bad input");
                         }
 
-                        if(args[1].substring(0, 4).equals("-un=")){
+                        if(args[1].startsWith("-un=")){
                             userTaskFind = args[1].substring(4).replace("'","");
+                        } else {
+                            System.out.println("bad input, retry.");
+                            break;
                         }
 
                         taskDAO.showUserTasks(userTaskFind);
@@ -82,8 +87,6 @@ public class Main {
 
                 }
 
-
-
-
     }
+
 }

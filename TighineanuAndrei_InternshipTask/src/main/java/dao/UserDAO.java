@@ -26,9 +26,8 @@ public class UserDAO {
         preparedStatement = connection.prepareStatement(queryString);
         resultSet = preparedStatement.executeQuery();
     }
-
-    public void createUser(User user){
-        try{
+    public void createUser(User user) {
+        try {
             String queryString = "INSERT INTO users(firstName, lastName, userName, tasksNumber) VALUES(?, ?, ?, ?)";
             connection = getConnection();
             preparedStatement = connection.prepareStatement(queryString);
@@ -39,10 +38,10 @@ public class UserDAO {
             preparedStatement.executeUpdate();
             System.out.println("Data added successfully");
 
-        } catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            try{
+            try {
                 if (preparedStatement != null)
                     preparedStatement.close();
                 if (connection != null)
@@ -54,22 +53,45 @@ public class UserDAO {
         }
     }
 
+    public boolean checkUserName(String userName) {
+        boolean sameUserName = false;
 
+        try {
+            String queryString = "SELECT * FROM users";
+            getResultSet(queryString);
 
-    public void showALlUsers(){
-        try{
+            while (resultSet.next()) {
 
+                if (resultSet.getString("userName").equals(userName)) {
+                    sameUserName = true;
+                }
+
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            freeResources();
+        }
+
+        return sameUserName;
+
+    }
+
+    public void showALlUsers() {
+
+        try {
             String queryString = "SELECT * FROM users";
             getResultSet(queryString);
 
             System.out.println("First Name" + "\t" + "Last Name" + "\t" + "User Name " + "\t" + "Nr of Tasks");
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 System.out.println("" + resultSet.getString("firstName") + "\t" +
                         resultSet.getString("lastName") + "\t" + resultSet.getString("userName")
                         + "\t" + resultSet.getInt("tasksNumber"));
             }
 
-        } catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             freeResources();
@@ -77,6 +99,7 @@ public class UserDAO {
     }
 
     private void freeResources() {
+
         try {
             if (resultSet != null)
                 resultSet.close();

@@ -7,10 +7,10 @@ import java.sql.SQLException;
 
 public class ConnectionManager {
 
-    private String driverClassName = "oracle.jdbc.OracleDriver";
-    private String connectionURL = "jdbc:oracle:thin:@localhost:1521:xe";
-    private String username = "STUDENT";
-    private String password = "STUDENT";
+    private final String driverClassName = "oracle.jdbc.OracleDriver";
+    private final String connectionURL = "jdbc:oracle:thin:@localhost:1521:xe";
+    private final String username = "STUDENT";
+    private final String password = "STUDENT";
 
     private static ConnectionManager connectionManager = null;
 
@@ -24,7 +24,7 @@ public class ConnectionManager {
     }
 
     public Connection getConnection() throws SQLException {
-        Connection connection = null;
+        Connection connection;
         connection = DriverManager.getConnection(connectionURL, username, password);
         return connection;
     }
